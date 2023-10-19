@@ -86,13 +86,23 @@ async function run() {
 
 // cart apis
     app.post("/cart",async (req,res)=>{
-      const product =req.body;
-      const result = await carts.insertOne(product)
-      res.send(result)
+
+
+      const product = req.body;
+
+      console.log(product._id)
+
+      const query = {_id: product._id}
+      const result = await carts.findOne(query)
+    
       
+      if(!result){
+        const resulta = await carts.insertOne(product)
+     res.send(resulta)
+      }
     })
 
-    app.get('/cart',async (rew,res)=>{
+    app.get('/cart',async (req,res)=>{
       const cursor = carts.find()
       const result = await cursor.toArray()
       res.send(result)
